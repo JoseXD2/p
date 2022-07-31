@@ -30,7 +30,7 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
+	<window if="mobile" orientation="landscape" fullscreen="true" width="1280" height="720" resizable="false" allow-shaders="true" require-shaders="true"/>
 
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
@@ -45,9 +45,9 @@
 	
 	<!-- PSYCH ENGINE CUSTOMIZATION -->
 	<define name="MODS_ALLOWED" if="desktop" />
-	<define name="LUA_ALLOWED" if="desktop" />
+	<define name="LUA_ALLOWED" if="windows || android" />
 	<!-- <define name ="ACHIEVEMENTS_ALLOWED" /> -->
-	<define name="VIDEOS_ALLOWED" if="web || windows" unless="32bits"/>
+	<define name="VIDEOS_ALLOWED" if="web || desktop || android"/>
 	<define name="PSYCH_WATERMARKS"/> <!-- DELETE THIS TO REMOVE WATERMARKS/DEV NAMES ON TITLE SCREEN -->
 	<define name="TITLE_SCREEN_EASTER_EGG" if="officialBuild"/> <!-- DELETE THE if="officialBuild" for enabling this on an unofficial build -->
 
@@ -106,6 +106,7 @@
 	
 	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
+	<assets path="assets/android" if="android"/>
 	<!-- <template path='mods' /> -->
 	
 	<!-- assets path="CHANGELOG.md" rename='changelog.txt' -->
@@ -129,6 +130,7 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="faxe" if='switch'/>
+	<haxelib name="extension-androidtools" if="android"/>
 	<!--<haxelib name="polymod"/> -->
 	<haxelib name="discord_rpc" if="desktop"/>
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
@@ -165,6 +167,8 @@
 	<!--Disable the Flixel core focus lost screen-->
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 
+	<haxedef name="HXCPP_GC_BIG_BLOCKS"/>
+	
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
