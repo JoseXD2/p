@@ -65,7 +65,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				camFollow = new FlxPoint(boyfriend.getGraphicMidpoint().x, boyfriend.getGraphicMidpoint().y);
 			}
 		else
-			startVideo('gameover_retry');
+			
 
 		FlxG.sound.play(Paths.sound(deathSoundName));
 		Conductor.changeBPM(100);
@@ -81,6 +81,10 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollowPos = new FlxObject(0, 0, 1, 1);
 		camFollowPos.setPosition(FlxG.camera.scroll.x + (FlxG.camera.width / 2), FlxG.camera.scroll.y + (FlxG.camera.height / 2));
 		add(camFollowPos);
+		
+		#if android
+	  addVirtualPad(NONE, A_B);
+    #end
 	}
 
 	var isFollowingAlready:Bool = false;
@@ -104,9 +108,9 @@ class GameOverSubstate extends MusicBeatSubstate
 			FlxG.sound.music.stop();
 			PlayState.deathCounter = 0;
 			PlayState.seenCutscene = false;
-			stopVid = true;
+			
 			if (PlayState.curSong == "freebase")
-				curVideo.stopVideo();
+				
 
 			if (PlayState.isStoryMode)
 				MusicBeatState.switchState(new StoryMenuState());
@@ -156,53 +160,8 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.sound.playMusic(Paths.music(loopSoundName), volume);
 	}
 
-	public function startVideo(name:String):Void {
-		#if VIDEOS_ALLOWED
-		var foundFile:Bool = false;
-		var fileName:String = #if MODS_ALLOWED Paths.modFolders('videos/' + name + '.' + Paths.VIDEO_EXT); #else ''; #end
-		#if sys
-		if(FileSystem.exists(fileName)) {
-			foundFile = true;
-		}
-		#end
-
-		if(!foundFile) {
-			fileName = Paths.video(name);
-			#if sys
-			if(FileSystem.exists(fileName)) {
-			#else
-			if(OpenFlAssets.exists(fileName)) {
-			#end
-				foundFile = true;
-			}
-		}
-
-		if(foundFile) {
-			curVideo = new FlxVideo(fileName);
-			curVideo.finishCallback = function() {
-				newVideo(fileName);
-			}
-			return;
-		}
-		else
-		{
-			FlxG.log.warn('Couldnt find video file: ' + fileName);
-		}
-		#end
-	}
-
-	function newVideo(name:String):Void
-		{
-			var fileName:String = name;
-			if (!stopVid)
-				{
-					curVideo = new FlxVideo(fileName);
-					curVideo.finishCallback = function() {
-						newVideo(fileName);
-					}
-				}
-		}
-
+	
+	
 	function endBullshit():Void
 	{
 		if (!isEnding)
@@ -212,7 +171,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				boyfriend.playAnim('deathConfirm', true);
 			stopVid = true;
 			if (PlayState.curSong == "freebase")
-				curVideo.stopVideo();
+				
 			FlxG.sound.music.stop();
 			FlxG.sound.play(Paths.music(endSoundName));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
